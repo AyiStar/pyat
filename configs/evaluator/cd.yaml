@@ -1,0 +1,5 @@
+name: 'cd'
+random_seed: 0
+train_size: 5
+test_ratio: 0.25
+noise_size: 0

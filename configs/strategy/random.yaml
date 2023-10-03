@@ -1,0 +1,4 @@
+name: 'random'
+class_name: 'RandomStrategy'
+
+seed: 0

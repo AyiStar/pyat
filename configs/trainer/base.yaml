@@ -1,0 +1,7 @@
+type: 'base'
+val_freq: 1
+test_freq: 10
+test_length: 10
+n_epochs: 15
+lr: 0.001
+batch_size: 128

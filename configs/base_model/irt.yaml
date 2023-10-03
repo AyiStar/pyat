@@ -1,0 +1,6 @@
+name: 'irt'
+class_name: 'ItemResponseTheoryModel'
+
+# update_policy: 'all'
+# update_max_loop: 5
+# update_lr: 0.01

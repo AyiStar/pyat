@@ -1,0 +1,17 @@
+name: 'akt'
+class_name: 'ContextAwareAttentiveKnowledgeTracingModel'
+
+d_model: 
+n_blocks:
+kq_same: 
+dropout:
+model_type:
+final_fc_dim: 512
+n_heads: 8
+d_ff: 2048
+l2: 1e-5
+separate_qa: False
+
+update_policy: 'all'
+update_max_loop: 3
+update_lr: 0.005

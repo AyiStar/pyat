@@ -1,0 +1,12 @@
+name: 'abml'
+class_name: 'AmortizedBayesianMetaLearning'
+
+inner_num_updates: 3
+inner_sgd: true
+inner_lr: 0.1
+inner_learn_lr: true
+num_samples: 4
+kl_weight: 1e-4
+update_policy: 'all'
+no_bayes: false  # for ablation study
+fix_prior: false  # for ablation study

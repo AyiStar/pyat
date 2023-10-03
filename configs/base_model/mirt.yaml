@@ -1,0 +1,7 @@
+name: 'mirt'
+class_name: 'MultidimensionalItemResponseTheoryModel'
+
+hidden_dim: 8
+update_policy: 'all'
+update_max_loop: 5
+update_lr: 0.005

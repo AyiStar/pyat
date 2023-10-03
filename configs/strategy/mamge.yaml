@@ -1,0 +1,8 @@
+name: 'MAMGEStrategy'
+
+emb_policy: 'pseudo'
+update_policy: 'last'
+rep_policy: 'global'
+use_meta_grad: true
+k: 10
+KC: 5

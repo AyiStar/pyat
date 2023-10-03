@@ -1,0 +1,4 @@
+name: 'MAATStrategy'
+
+k: 5
+emb_policy: 'expected'

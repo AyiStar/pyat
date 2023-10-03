@@ -1,0 +1,6 @@
+name: 'maml'
+class_name: 'ModelAgnosticMetaLearning'
+
+update_policy: 'all'
+num_inner_updates: 3
+inner_lr: 0.1

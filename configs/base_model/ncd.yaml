@@ -1,0 +1,9 @@
+name: 'ncd'
+class_name: 'NeuralCognitiveDiagnosisModel'
+
+prednet_len_1: 256
+prednet_len_2: 32
+dropout_rate: 0.2
+update_policy: 'all'
+update_max_loop: 3
+update_lr: 0.005

@@ -1,0 +1,7 @@
+name: 'fcn'
+class_name: 'FullyConnectedNetworkModel'
+user_dim: 8
+hidden_dim: 64
+update_max_loop: 3
+update_lr: 0.01
+update_policy: 'all'

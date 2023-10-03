@@ -1,0 +1,32 @@
+dataset_name: 'timss'
+dataset_dir: '/home/ayistar/OneDrive/Data/Adaptive-Testing/'
+# dataset_dir: '/data/hby0728/Adaptive-Testing/hutu/'
+dataset_seed: 0
+output_dir: '/home/ayistar/OneDrive/Workspace/P/pyat/exp/output/'
+# output_dir: '/output/'
+silent: false
+# load_model_dir: '/home/ayistar/OneDrive/Workspace/P/pyat/saved_models/vanilla/'
+load_model_dir: null
+
+seed_all: 0
+logger:
+  level: 'DEBUG'
+  stream_handler: true
+  file_handler: true
+  file_path: null
+
+defaults:
+  - _self_
+  - base_model: irt
+  - meta_model: null
+  - strategy: null
+  - trainer: null
+  - evaluator: null
+  - stopping_criterion: fixed_length
+  - override hydra/hydra_logging: none
+  - override hydra/job_logging: none
+
+hydra:
+  output_subdir: null
+  run:
+    dir: .

@@ -1,0 +1,8 @@
+name: 'dina'
+class_name: 'DeterministicInputNoisyAndGateModel'
+
+update_policy: 'all'
+update_max_loop: 6
+update_lr: 0.01
+max_slip: 0.4
+max_guess: 0.4

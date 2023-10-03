@@ -1,0 +1,4 @@
+name: 'bald'
+class_name: 'BayesianActiveLearningByDisagreementStrategy'
+
+num_samples: 8

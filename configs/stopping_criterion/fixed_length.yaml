@@ -1,0 +1,4 @@
+name: 'fixed_length'
+class_name: 'FixedLengthStoppingCriterion'
+
+length: 10

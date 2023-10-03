@@ -1,0 +1,2 @@
+name: 'mfi'
+class_name: 'MaximumFisherInformationStrategy'
