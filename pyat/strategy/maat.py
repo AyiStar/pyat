@@ -56,7 +56,7 @@ class MAATStrategy(BaseStrategy):
         with torch.no_grad():
             item_nos_input = torch.tensor(item_nos).long().to(model.device)
             user_nos_input = torch.tensor([user_no]).long().expand_as(item_nos_input).to(model.device)
-            preds = model(user_nos_input, item_nos_input).cpu().numpy()
+            preds = model(item_nos_input).cpu().numpy()
             if self.emb_policy == 'pseudo':
                 preds = np.where(preds > 0.5, 1, 0)
             else:
@@ -68,12 +68,12 @@ class MAATStrategy(BaseStrategy):
         #     all_item_nos = [session['selected'] + [item_no] for item_no in item_nos]
 
         pseudo_labels = [1]*len(item_nos)
-        pos_grads = get_grad_embeddings(model, user_no, item_nos, pseudo_labels)
+        pos_grads = get_grad_embeddings(model, item_nos, pseudo_labels)
         # pos_grads = get_model_changes(model, user_no, item_nos, pseudo_labels, session)
         # grads_norm_pos = np.linalg.norm(pos_grads, axis=1)
 
         pseudo_labels = [0] * len(item_nos)
-        neg_grads = get_grad_embeddings(model, user_no, item_nos, pseudo_labels)
+        neg_grads = get_grad_embeddings(model, item_nos, pseudo_labels)
         # neg_grads = get_model_changes(model, user_no, item_nos, pseudo_labels, session)
         # grads_norm_neg = np.linalg.norm(neg_grads, axis=1)
 

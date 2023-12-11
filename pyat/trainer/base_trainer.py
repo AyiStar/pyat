@@ -32,7 +32,7 @@ class BaseTrainer:
         self.best_result = None
         self.user_params = None
 
-    def fit(self, train_data: Dict, val_data: Optional[Dict], cfg: DictConfig):
+    def fit(self, train_data: Dict, val_data: Optional[Dict], test_data: Optional[Dict], cfg: DictConfig):
 
         # Dict is the type of a preprocessed data object
         assert all(k in cfg for k in ['n_epochs', 'lr', 'batch_size', 'val_freq']), 'Missing key(s) in cfg'

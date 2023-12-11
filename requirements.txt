@@ -1,0 +1,7 @@
+numpy
+scipy
+scikit-learn
+torch
+tensorboard
+tqdm
+hydra-core

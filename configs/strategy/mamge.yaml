@@ -1,4 +1,5 @@
-name: 'MAMGEStrategy'
+name: "mamge"
+class_name: 'MAMGEStrategy'
 
 emb_policy: 'pseudo'
 update_policy: 'last'

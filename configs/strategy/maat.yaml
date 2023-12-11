@@ -1,4 +1,5 @@
-name: 'MAATStrategy'
+name: 'maat'
+class_name: 'MAATStrategy'
 
 k: 5
 emb_policy: 'expected'
