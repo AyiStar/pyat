@@ -59,12 +59,12 @@ def get_tags(cfg: DictConfig) -> Tuple[List[str], List[str]]:
     return model_tags, exp_tags
 
 
-def show_dataset_info(cfg: DictConfig,
+def show_dataset_info(dataset_name: str,
                       train_dataobj: Dict,
                       test_dataobj: Dict,
                       logger: logging.Logger):
     info_table = PrettyTable()
-    info_table.add_column(cfg.dataset_name,
+    info_table.add_column(dataset_name,
                           ["#Users",
                            "#Items",
                            "#Knolwedge",
@@ -155,8 +155,7 @@ def main(cfg: DictConfig):
     test_data_path = os.path.join(dataset_dir, dataset_name, f'{dataset_name}_test_seed_{dataset_seed}.pkl')
     with open(test_data_path, 'rb') as f:
         test_data = pickle.load(f)
-    # TODO show dataset info
-    show_dataset_info(cfg, all_train_data, test_data, global_logger.logger)
+    show_dataset_info(cfg.dataset_name, all_train_data, test_data, global_logger.logger)
 
 
     """ Create Model and Strategy """
