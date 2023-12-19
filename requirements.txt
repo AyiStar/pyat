@@ -5,3 +5,4 @@ torch
 tensorboard
 tqdm
 hydra-core
+prettytable

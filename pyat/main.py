@@ -4,6 +4,7 @@ import logging
 import os.path
 import random
 import tempfile
+import itertools
 from datetime import datetime
 from typing import List, Dict, Tuple
 
@@ -11,6 +12,7 @@ import torch
 import hydra
 import numpy as np
 from omegaconf import DictConfig, OmegaConf, open_dict
+from prettytable import PrettyTable
 
 from pyat.utils.data import split_data_by_user, split_data_by_log
 from pyat.model import build_base_model, build_meta_model, BaseModel, MetaModel
@@ -55,6 +57,39 @@ def get_tags(cfg: DictConfig) -> Tuple[List[str], List[str]]:
             exp_tags.append(str(cfg.evaluator.train_size))
             exp_tags.append(str(cfg.evaluator.random_seed))
     return model_tags, exp_tags
+
+
+def show_dataset_info(cfg: DictConfig,
+                      train_dataobj: Dict,
+                      test_dataobj: Dict,
+                      logger: logging.Logger):
+    info_table = PrettyTable()
+    info_table.add_column(cfg.dataset_name,
+                          ["#Users",
+                           "#Items",
+                           "#Knolwedge",
+                           "#Logs",
+                           "#Avg.Logs",
+                           "#Min.Logs",
+                           "#Max.Logs"])
+    info_table.add_column("Train",
+                          [train_dataobj['meta_data']['num_users'],
+                           train_dataobj['meta_data']['num_items'],
+                           train_dataobj['meta_data']['num_knowledge'],
+                           train_dataobj['meta_data']['num_logs'],
+                           sum(list(map(len, train_dataobj['user_data']))) / len(train_dataobj['user_data']),
+                           min(list(map(len, train_dataobj['user_data']))),
+                           max(list(map(len, train_dataobj['user_data'])))])
+    info_table.add_column('Test',
+                          [test_dataobj['meta_data']['num_users'],
+                           test_dataobj['meta_data']['num_items'],
+                           test_dataobj['meta_data']['num_knowledge'],
+                           test_dataobj['meta_data']['num_logs'],
+                           sum(list(map(len, test_dataobj['user_data']))) / len(test_dataobj['user_data']),
+                           min(list(map(len, test_dataobj['user_data']))),
+                           max(list(map(len, test_dataobj['user_data'])))])
+    info_table.float_format = '.2'
+    logger.info('\n' + info_table.get_string())
 
 
 def main(cfg: DictConfig):
@@ -121,6 +156,7 @@ def main(cfg: DictConfig):
     with open(test_data_path, 'rb') as f:
         test_data = pickle.load(f)
     # TODO show dataset info
+    show_dataset_info(cfg, all_train_data, test_data, global_logger.logger)
 
 
     """ Create Model and Strategy """
