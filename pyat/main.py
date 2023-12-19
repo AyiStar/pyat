@@ -112,14 +112,15 @@ def main(cfg: DictConfig):
     """ Load Data """
     train_data_path = os.path.join(dataset_dir, dataset_name, f'{dataset_name}_train_seed_{dataset_seed}.pkl')
     with open(train_data_path, 'rb') as f:
-        train_data = pickle.load(f)
+        all_train_data = pickle.load(f)
         if not use_meta_model:
-            train_data, val_data = split_data_by_log(train_data, split_ratio=0.8)
+            train_data, val_data = split_data_by_log(all_train_data, split_ratio=0.8)
         else:
-            train_data, val_data = split_data_by_user(train_data, split_ratio=0.75)
+            train_data, val_data = split_data_by_user(all_train_data, split_ratio=0.75)
     test_data_path = os.path.join(dataset_dir, dataset_name, f'{dataset_name}_test_seed_{dataset_seed}.pkl')
     with open(test_data_path, 'rb') as f:
         test_data = pickle.load(f)
+    # TODO show dataset info
 
 
     """ Create Model and Strategy """

@@ -7,7 +7,7 @@ import numpy as np
 
 from .base import BaseStrategy
 from pyat.model.base.irt import ItemResponseTheoryModel
-from ._utils import get_grad_embeddings, get_model_changes
+from ._utils import get_grad_embeddings
 from .build import STRATEGY_REGISTRY
 
 
