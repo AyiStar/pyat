@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data as data
-from torch.nn.utils.stateless import functional_call
+from torch.func import functional_call
 
 import numpy as np
 from sklearn.metrics import accuracy_score, roc_auc_score
@@ -65,7 +65,7 @@ class BaseTrainer:
             for sessions in tqdm(train_dataloader, disable=self.silent):
                 user_no_list, item_nos_list, labels = self._generate_train_batch(sessions)
                 preds = torch.concat([functional_call(
-                    self.model, parameters_and_buffers={k: p[user_no] for k, p in self.user_params.items()}, args=(item_nos,))
+                    self.model, parameter_and_buffer_dicts={k: p[user_no] for k, p in self.user_params.items()}, args=(item_nos,))
                     for user_no, item_nos in zip(user_no_list, item_nos_list)])
                 loss = loss_func(preds, labels)
                 optimizer.zero_grad()

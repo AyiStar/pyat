@@ -3,7 +3,7 @@ import typing
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.nn.utils.stateless import functional_call
+from torch.func import functional_call
 
 import pyat.utils.global_logger as glogger
 from ..base_classes import BaseModel, MetaModel

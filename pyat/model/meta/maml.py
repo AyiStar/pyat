@@ -2,7 +2,7 @@ import typing
 
 import torch
 import torch.nn as nn
-from torch.nn.utils.stateless import functional_call
+from torch.func import functional_call
 
 from ..base_classes import BaseModel, MetaModel
 from ..hyper import IdentityNet
