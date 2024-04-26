@@ -34,7 +34,8 @@ class NormalVariationalNet(torch.nn.Module):
         """
         super(NormalVariationalNet, self).__init__()
         base_params = base_net.get_user_params()
-        self.mean = torch.nn.ParameterDict(base_params)
+        self.mean = torch.nn.ParameterDict({k: (torch.randn_like(v))
+                                               for k, v in base_params.items()})
         self.log_std = torch.nn.ParameterDict({k: (torch.rand_like(v) - 4)
                                                for k, v in base_params.items()})
 
