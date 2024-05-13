@@ -3,7 +3,6 @@ from typing import Dict
 
 
 class BaseStrategy(ABC):
-
     @abstractmethod
     def select_item(self, session: Dict) -> int:
         """

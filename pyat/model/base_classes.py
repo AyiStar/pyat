@@ -6,7 +6,6 @@ import torch.nn as nn
 
 
 class BaseModel(ABC, nn.Module):
-
     @abstractmethod
     def init_user_params(self, params=None) -> None:
         raise NotImplementedError()
@@ -23,16 +22,17 @@ class BaseModel(ABC, nn.Module):
     def update_user_params(self, session: typing.Dict) -> None:
         # default implementation
         loss_fn = nn.BCELoss()
-        optimizer = torch.optim.Adam(list(self.get_user_params().values()), lr=self.update_lr)
+        optimizer = torch.optim.Adam(
+            list(self.get_user_params().values()), lr=self.update_lr
+        )
 
-        if self.update_policy == 'last':
-            item_nos = session['selected'][-1:]
+        if self.update_policy == "last":
+            item_nos = session["selected"][-1:]
         else:
-            item_nos = session['selected']
-        labels = [session['all_logs'][i] for i in item_nos]
+            item_nos = session["selected"]
+        labels = [session["all_logs"][i] for i in item_nos]
 
         for i in range(self.update_max_loop):
-
             # Stochastic Gradient Descent
             for item_no, label in zip(item_nos, labels):
                 item_no_t = torch.LongTensor([item_no]).squeeze().to(self.device)
@@ -61,7 +61,6 @@ class BaseModel(ABC, nn.Module):
 
 
 class MetaModel(BaseModel, ABC):
-
     @property
     def base_model(self):
         return self._base_model
@@ -79,9 +78,12 @@ class MetaModel(BaseModel, ABC):
         self._hyper_model = value
 
     @abstractmethod
-    def adaptation(self, item_nos: torch.LongTensor, labels: torch.Tensor,
-                   adapted_hyper_model: typing.Dict[str, torch.Tensor]
-                   ) -> typing.Dict[str, torch.Tensor]:
+    def adaptation(
+        self,
+        item_nos: torch.LongTensor,
+        labels: torch.Tensor,
+        adapted_hyper_model: typing.Dict[str, torch.Tensor],
+    ) -> typing.Dict[str, torch.Tensor]:
         raise NotImplementedError()
 
     @abstractmethod
@@ -89,14 +91,19 @@ class MetaModel(BaseModel, ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def prediction(self, item_nos: torch.LongTensor,
-                   adapted_hyper_model: typing.Dict[str, torch.Tensor]
-                   ) -> torch.Tensor:
+    def prediction(
+        self,
+        item_nos: torch.LongTensor,
+        adapted_hyper_model: typing.Dict[str, torch.Tensor],
+    ) -> torch.Tensor:
         raise NotImplementedError()
 
     @abstractmethod
-    def validation(self, item_nos: torch.LongTensor, labels: torch.Tensor,
-                   adapted_hyper_model: typing.Dict[str, torch.Tensor],
-                   return_prediction: bool = False
-                   ) -> torch.Tensor:
+    def validation(
+        self,
+        item_nos: torch.LongTensor,
+        labels: torch.Tensor,
+        adapted_hyper_model: typing.Dict[str, torch.Tensor],
+        return_prediction: bool = False,
+    ) -> torch.Tensor:
         raise NotImplementedError()

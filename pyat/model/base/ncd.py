@@ -18,19 +18,20 @@ class PosLinear(nn.Linear):
 
 @BASE_MODEL_REGISTRY.register()
 class NeuralCognitiveDiagnosisModel(BaseModel):
-
     def __init__(self, cfg: Dict):
         nn.Module.__init__(self)
         self.cfg = cfg
         # set up network structure parameters
-        self.num_knowledge = cfg['num_knowledge']
-        self.prednet_len_1 = cfg['prednet_len_1']
-        self.prednet_len_2 = cfg['prednet_len_2']
-        self.dropout_rate = cfg['dropout_rate']
+        self.num_knowledge = cfg["num_knowledge"]
+        self.prednet_len_1 = cfg["prednet_len_1"]
+        self.prednet_len_2 = cfg["prednet_len_2"]
+        self.dropout_rate = cfg["dropout_rate"]
         # set up network structure
-        self.user_params = nn.Parameter(torch.zeros(self.num_knowledge), requires_grad=True)
-        self.knowledge_difficulty = nn.Embedding(cfg['num_items'], self.num_knowledge)
-        self.item_difficulty = nn.Embedding(cfg['num_items'], 1)
+        self.user_params = nn.Parameter(
+            torch.zeros(self.num_knowledge), requires_grad=True
+        )
+        self.knowledge_difficulty = nn.Embedding(cfg["num_items"], self.num_knowledge)
+        self.item_difficulty = nn.Embedding(cfg["num_items"], 1)
         if self.prednet_len_2 is not None:
             self.net = nn.Sequential(
                 PosLinear(self.num_knowledge, self.prednet_len_1),
@@ -39,33 +40,34 @@ class NeuralCognitiveDiagnosisModel(BaseModel):
                 PosLinear(self.prednet_len_1, self.prednet_len_2),
                 nn.ReLU(),
                 nn.Dropout(p=self.dropout_rate),
-                PosLinear(self.prednet_len_2, 1)
+                PosLinear(self.prednet_len_2, 1),
             )
         else:
             self.net = nn.Sequential(
                 PosLinear(self.num_knowledge, self.prednet_len_1),
                 nn.ReLU(),
                 nn.Dropout(p=self.dropout_rate),
-                PosLinear(self.prednet_len_1, 1)
+                PosLinear(self.prednet_len_1, 1),
             )
 
-        self.item_data = self.cfg['item_data']
-        self.update_policy = cfg['update_policy']
-        assert self.update_policy in ('last', 'all')
-        self.update_max_loop = cfg['update_max_loop']
-        self.update_lr = cfg['update_lr']
-        self.device = self.cfg['device']
+        self.item_data = self.cfg["item_data"]
+        self.update_policy = cfg["update_policy"]
+        assert self.update_policy in ("last", "all")
+        self.update_max_loop = cfg["update_max_loop"]
+        self.update_lr = cfg["update_lr"]
+        self.device = self.cfg["device"]
 
         # cache all the knowledge embeddings
-        self.knowledge_embs = make_knowledge_embs(self.item_data, list(range(len(self.item_data)))
-                                                  , self.num_knowledge).to(self.device)
+        self.knowledge_embs = make_knowledge_embs(
+            self.item_data, list(range(len(self.item_data))), self.num_knowledge
+        ).to(self.device)
         # init or load pretrained
         self._init()
 
     def _init(self):
         nn.init.normal_(self.user_params)
         for name, param in self.named_parameters():
-            if 'weight' in name:
+            if "weight" in name:
                 nn.init.xavier_normal_(param)
 
     def forward(self, item_nos: torch.LongTensor) -> torch.Tensor:
@@ -93,12 +95,12 @@ class NeuralCognitiveDiagnosisModel(BaseModel):
         super().update_user_params(session)
 
     def get_user_params(self) -> Dict:
-        return {k: v for k, v in self.named_parameters() if
-                k.startswith('user_params')}
+        return {k: v for k, v in self.named_parameters() if k.startswith("user_params")}
 
     def get_item_params(self) -> Dict:
-        return {k: v for k, v in self.named_parameters() if
-                not k.startswith('user_params')}
+        return {
+            k: v for k, v in self.named_parameters() if not k.startswith("user_params")
+        }
 
 
 """

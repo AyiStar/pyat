@@ -15,26 +15,30 @@ from pyat.stopping_criterion import BaseStoppingCriterion
 
 
 class AdaptiveTestingEvaluator(object):
-
-    def __init__(self, model: BaseModel, strategy: BaseStrategy, stopping_criterion: BaseStoppingCriterion, device):
-
+    def __init__(
+        self,
+        model: BaseModel,
+        strategy: BaseStrategy,
+        stopping_criterion: BaseStoppingCriterion,
+        device,
+    ):
         self.model = model
         self.strategy = strategy
         self.stopping_criterion = stopping_criterion
         self.device = device
 
-    def evaluate(self, data: typing.Dict, cfg: typing.Dict) \
-            -> typing.Union[typing.Dict, typing.List[typing.Dict]]:
-
+    def evaluate(
+        self, data: typing.Dict, cfg: typing.Dict
+    ) -> typing.Union[typing.Dict, typing.List[typing.Dict]]:
         self.model.eval()
 
         silent = gconfig.silent
 
         def _init_session(sess: typing.Dict) -> typing.Dict:
-            sess['unselected'] = list(sess['all_logs'].keys())
-            sess['selected'] = []
-            sess['base_model'] = self.model
-            sess['item_data'] = data['item_data']
+            sess["unselected"] = list(sess["all_logs"].keys())
+            sess["selected"] = []
+            sess["base_model"] = self.model
+            sess["item_data"] = data["item_data"]
             return sess
 
         dataset = SessionDataset(data)
@@ -48,8 +52,8 @@ class AdaptiveTestingEvaluator(object):
             step = 0
 
             while True:
-                item_nos = list(session['all_logs'].keys())
-                labels = [session['all_logs'][i] for i in item_nos]
+                item_nos = list(session["all_logs"].keys())
+                labels = [session["all_logs"][i] for i in item_nos]
                 item_nos = torch.tensor(item_nos).long().to(self.device)
                 preds = self.model(item_nos).detach().cpu().numpy().tolist()
                 all_preds.setdefault(step, [])
@@ -58,8 +62,8 @@ class AdaptiveTestingEvaluator(object):
                 all_labels[step].extend(labels)
                 if not self.stopping_criterion.stop(session):
                     selection = self.strategy.select_item(session)
-                    session['unselected'].remove(selection)
-                    session['selected'].append(selection)
+                    session["unselected"].remove(selection)
+                    session["selected"].append(selection)
                     self.model.update_user_params(session)
                     step = step + 1
                 else:
@@ -73,9 +77,11 @@ class AdaptiveTestingEvaluator(object):
             acc = accuracy_score(labels, bin_preds)
             auc = roc_auc_score(labels, preds)
             rmse = np.sqrt(np.mean((preds - labels) ** 2))
-            loss = nn.BCELoss()(torch.from_numpy(preds).double().to(self.device),
-                                torch.from_numpy(labels).double().to(self.device))
-            results[i] = {'acc': acc, 'auc': auc, 'rmse': rmse, 'loss': loss}
+            loss = nn.BCELoss()(
+                torch.from_numpy(preds).double().to(self.device),
+                torch.from_numpy(labels).double().to(self.device),
+            )
+            results[i] = {"acc": acc, "auc": auc, "rmse": rmse, "loss": loss}
 
         self.model.train()
 
@@ -86,7 +92,7 @@ class AdaptiveTestingEvaluator(object):
         # select item
         selection = self.strategy.select_item(session)
         # update session
-        session['unselected'].remove(selection)
-        session['selected'].append(selection)
+        session["unselected"].remove(selection)
+        session["selected"].append(selection)
         # update model
         self.model.update_user_params(session)

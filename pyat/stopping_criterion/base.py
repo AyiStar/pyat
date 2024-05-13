@@ -3,7 +3,6 @@ from typing import Dict
 
 
 class BaseStoppingCriterion(ABC):
-
     @abstractmethod
     def __init__(self, cfg):
         raise NotImplementedError

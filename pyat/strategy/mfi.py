@@ -10,18 +10,19 @@ from .build import STRATEGY_REGISTRY
 
 @STRATEGY_REGISTRY.register()
 class MaximumFisherInformationStrategy(BaseStrategy):
-
     def __init__(self, cfg: Dict):
         super().__init__()
 
     def select_item(self, session: Dict) -> int:
-        unselected = list(session['unselected'])
-        selection = unselected[np.argmax(self._fisher_information_batch(unselected, session))]
+        unselected = list(session["unselected"])
+        selection = unselected[
+            np.argmax(self._fisher_information_batch(unselected, session))
+        ]
         return selection
 
     @staticmethod
     def _fisher_information_batch(item_nos: List, session) -> List:
-        model = session['base_model']
+        model = session["base_model"]
         item_nos = torch.tensor(item_nos).long().to(model.device)
 
         with torch.no_grad():
